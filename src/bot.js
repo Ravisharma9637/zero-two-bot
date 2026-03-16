@@ -211,22 +211,26 @@ bot.onText(/^\.unmute/i, async (msg) => {
 });
 
 // ── All messages ───────────────────────────────────────────────────────────────
-bot.on("message", async (msg) => {
-  if (msg.text && msg.text.match(/^[\/\.]/)) return;
+bot.on("message",async(msg)=>{
+if(msg.text&&msg.text.match(/^[\/\.]/))return;
 
-  if (isGroup(msg)) {
-    if (msg.sticker) {
-      await handleSticker(msg);
-    } else {
-      await handleGroupMessage(msg);
-    }
-  } else {
-    if (msg.sticker) {
-      await handleSticker(msg);
-    } else if (msg.text) {
-      await handleText(msg);
-    }
-  }
+if(isGroup(msg)){
+const me=await bot.getMe();
+const isReplyToBot=msg.reply_to_message?.from?.id===me.id;
+
+if(msg.sticker&&isReplyToBot){
+await handleSticker(msg);
+}else if(msg.text){
+await handleGroupMessage(msg);
+}
+
+}else{
+if(msg.sticker){
+await handleSticker(msg);
+}else if(msg.text){
+await handleText(msg);
+}
+}
 });
 
 // ── Private text ───────────────────────────────────────────────────────────────
