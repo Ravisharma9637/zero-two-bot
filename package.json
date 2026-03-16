@@ -1,21 +1,22 @@
 {
-  "name": "zero-two-telegram-bot",
-  "version": "1.0.0",
-  "description": "A Zero Two (Darling in the FranXX) Telegram chatbot powered by Sarvam-M via NVIDIA NIM",
-  "main": "src/bot.js",
-  "scripts": {
-    "start": "node src/bot.js",
-    "dev": "nodemon src/bot.js"
-  },
-  "dependencies": {
-    "dotenv": "^16.4.5",
-    "node-telegram-bot-api": "^0.66.0",
-    "openai": "^4.52.0"
-  },
-  "devDependencies": {
-    "nodemon": "^3.1.4"
-  },
-  "engines": {
-    "node": ">=18.0.0"
-  }
+"name":"zero-two-telegram-bot",
+"version":"1.0.0",
+"description":"A Zero Two (Darling in the FranXX) Telegram chatbot powered by Sarvam-M via NVIDIA NIM",
+"main":"src/bot.js",
+"scripts":{
+"start":"node src/bot.js",
+"dev":"nodemon src/bot.js"
+},
+"dependencies":{
+"dotenv":"^16.4.5",
+"node-telegram-bot-api":"^0.66.0",
+"openai":"^4.52.0",
+"express":"^4.18.2"
+},
+"devDependencies":{
+"nodemon":"^3.1.4"
+},
+"engines":{
+"node":">=18.0.0"
+}
 }
