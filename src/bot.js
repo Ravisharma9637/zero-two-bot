@@ -332,6 +332,11 @@ res.send("Bot is running")
 })
 
 const PORT=process.env.PORT||3000
+setInterval(()=>{
+fetch("https://zero-two-bot-tfbv.onrender.com")
+.then(()=>console.log("Self ping successful"))
+.catch(()=>console.log("Self ping failed"));
+},300000);
 app.listen(PORT,()=>{
 console.log("Server running on port "+PORT)
 })
