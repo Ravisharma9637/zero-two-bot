@@ -1,3 +1,5 @@
+const express=require("express")
+const app=express()
 const TelegramBot = require("node-telegram-bot-api");
 const { getAIResponse, getStickerResponse } = require("./ai");
 const { getMemory, saveMemory, clearMemory } = require("./memory");
@@ -321,3 +323,11 @@ async function handleSticker(msg) {
 }
 
 bot.on("polling_error", (err) => console.error("Polling error:", err.message));
+app.get("/",(req,res)=>{
+res.send("Bot is running")
+})
+
+const PORT=process.env.PORT||3000
+app.listen(PORT,()=>{
+console.log("Server running on port "+PORT)
+})
