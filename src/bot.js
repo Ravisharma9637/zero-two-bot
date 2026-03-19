@@ -160,26 +160,12 @@ mood!=="neutral"?`mood ${mood}`:""
 bot.sendChatAction(chatId,"choose_sticker")
 
 try{
-const history=getMemory(chatId)
-
-const[textReply,replyStickerId]=await Promise.all([
-getStickerResponse({stickerContext,userName,isSpecial:isSpecialUser(msg),history}),
-getStickerForMood(config.TELEGRAM_TOKEN,mood)
-])
-
+const replyStickerId=await getStickerForMood(config.TELEGRAM_TOKEN,mood)
 if(replyStickerId){
 await bot.sendSticker(chatId,replyStickerId,{
 ...(group&&{reply_to_message_id:msg.message_id})
 })
 }
-
-await bot.sendMessage(chatId,textReply,{
-parse_mode:"Markdown",
-...(group&&{reply_to_message_id:msg.message_id})
-})
-
-saveMemory(chatId,`[sticker: ${stickerContext}]`,textReply)
-
 }catch(err){
 console.error("Sticker error:",err.message)
 }
