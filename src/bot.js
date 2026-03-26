@@ -216,7 +216,7 @@ bot.onText(/^\.chup/i,async(msg)=>{
 })
 
 // .unmute
-bot.onText(/^\.bol_le/i,async(msg)=>{
+bot.onText(/^\.bolle/i,async(msg)=>{
   if(!isGroup(msg))return
   if(!await canUseCommands(msg)){
     return bot.sendMessage(msg.chat.id,"Hmp. Only admins can command me~ 😏 meowww",{reply_to_message_id:msg.message_id})
