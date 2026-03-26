@@ -152,7 +152,7 @@ bot.onText(/^\.maxpromote(.*)$/i,async(msg,match)=>{
 })
 
 // .ban
-bot.onText(/^\.ban/i,async(msg)=>{
+bot.onText(/^\.nikal/i,async(msg)=>{
   if(!isGroup(msg))return
   if(!await canUseCommands(msg)){
     return bot.sendMessage(msg.chat.id,"Hmp. Only admins can command me~ 😏 meowww",{reply_to_message_id:msg.message_id})
@@ -169,7 +169,7 @@ bot.onText(/^\.ban/i,async(msg)=>{
 })
 
 // .unban
-bot.onText(/^\.unban/i,async(msg)=>{
+bot.onText(/^\.aaja/i,async(msg)=>{
   if(!isGroup(msg))return
   if(!await canUseCommands(msg)){
     return bot.sendMessage(msg.chat.id,"Hmp. Only admins can command me~ 😏 meowww",{reply_to_message_id:msg.message_id})
@@ -186,7 +186,7 @@ bot.onText(/^\.unban/i,async(msg)=>{
 })
 
 // .mute
-bot.onText(/^\.mute/i,async(msg)=>{
+bot.onText(/^\.chup/i,async(msg)=>{
   if(!isGroup(msg))return
   if(!await canUseCommands(msg)){
     return bot.sendMessage(msg.chat.id,"Hmp. Only admins can command me~ 😏 meowww",{reply_to_message_id:msg.message_id})
@@ -216,7 +216,7 @@ bot.onText(/^\.mute/i,async(msg)=>{
 })
 
 // .unmute
-bot.onText(/^\.unmute/i,async(msg)=>{
+bot.onText(/^\.bol_le/i,async(msg)=>{
   if(!isGroup(msg))return
   if(!await canUseCommands(msg)){
     return bot.sendMessage(msg.chat.id,"Hmp. Only admins can command me~ 😏 meowww",{reply_to_message_id:msg.message_id})
@@ -246,7 +246,7 @@ bot.onText(/^\.unmute/i,async(msg)=>{
 })
 
 // .kick (remove from group but don't ban)
-bot.onText(/^\.kick/i,async(msg)=>{
+bot.onText(/^\.thuu/i,async(msg)=>{
   if(!isGroup(msg))return
   if(!await canUseCommands(msg)){
     return bot.sendMessage(msg.chat.id,"Hmp. you can't command me~ 😏 meowww",{reply_to_message_id:msg.message_id})
