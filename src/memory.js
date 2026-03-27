@@ -1,63 +1,76 @@
-const fs = require("fs");
-const path = require("path");
+const mongoose = require("mongoose");
 
-const MEMORY_FILE = path.join(__dirname, "../data/memory.json");
-const MAX_HISTORY_PER_USER = 50; // keep last 50 exchanges per user
+// ── Connect to MongoDB ─────────────────────────────────────────────────────────
+let connected = false;
 
-// Ensure data directory exists
-function ensureDir() {
-  const dir = path.dirname(MEMORY_FILE);
-  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-}
-
-// Load all memory from disk
-function loadAll() {
-  ensureDir();
-  if (!fs.existsSync(MEMORY_FILE)) return {};
+async function connect() {
+  if (connected) return;
   try {
-    return JSON.parse(fs.readFileSync(MEMORY_FILE, "utf-8"));
+    await mongoose.connect(process.env.MONGODB_URI);
+    connected = true;
+    console.log("✅ MongoDB connected — memories will persist forever 🌸");
+  } catch (err) {
+    console.error("❌ MongoDB connection failed:", err.message);
+  }
+}
+
+// ── Schema ─────────────────────────────────────────────────────────────────────
+const messageSchema = new mongoose.Schema({
+  user: String,
+  bot: String,
+  timestamp: { type: Date, default: Date.now },
+});
+
+const memorySchema = new mongoose.Schema({
+  chatId: { type: String, required: true, unique: true },
+  messages: [messageSchema],
+});
+
+const Memory = mongoose.model("Memory", memorySchema);
+
+// ── Get memory for a chat ──────────────────────────────────────────────────────
+async function getMemory(chatId) {
+  await connect();
+  try {
+    const doc = await Memory.findOne({ chatId: String(chatId) });
+    return doc ? doc.messages : [];
   } catch {
-    return {};
+    return [];
   }
 }
 
-// Save all memory to disk
-function saveAll(data) {
-  ensureDir();
-  fs.writeFileSync(MEMORY_FILE, JSON.stringify(data, null, 2));
-}
+// ── Save a new exchange ────────────────────────────────────────────────────────
+async function saveMemory(chatId, userText, botReply) {
+  await connect();
+  try {
+    const MAX = 50;
+    let doc = await Memory.findOne({ chatId: String(chatId) });
 
-// Get memory for a specific chat
-function getMemory(chatId) {
-  const all = loadAll();
-  return all[String(chatId)] || [];
-}
+    if (!doc) {
+      doc = new Memory({ chatId: String(chatId), messages: [] });
+    }
 
-// Save a new exchange to memory
-function saveMemory(chatId, userText, botReply) {
-  const all = loadAll();
-  const key = String(chatId);
-  if (!all[key]) all[key] = [];
+    doc.messages.push({ user: userText, bot: botReply });
 
-  all[key].push({
-    user: userText,
-    bot: botReply,
-    timestamp: new Date().toISOString(),
-  });
+    // Keep only last 50 messages
+    if (doc.messages.length > MAX) {
+      doc.messages = doc.messages.slice(-MAX);
+    }
 
-  // Trim to max history
-  if (all[key].length > MAX_HISTORY_PER_USER) {
-    all[key] = all[key].slice(-MAX_HISTORY_PER_USER);
+    await doc.save();
+  } catch (err) {
+    console.error("Memory save error:", err.message);
   }
-
-  saveAll(all);
 }
 
-// Clear memory for a chat
-function clearMemory(chatId) {
-  const all = loadAll();
-  delete all[String(chatId)];
-  saveAll(all);
+// ── Clear memory for a chat ────────────────────────────────────────────────────
+async function clearMemory(chatId) {
+  await connect();
+  try {
+    await Memory.deleteOne({ chatId: String(chatId) });
+  } catch (err) {
+    console.error("Memory clear error:", err.message);
+  }
 }
 
 module.exports = { getMemory, saveMemory, clearMemory };
