@@ -358,9 +358,8 @@ async function handleSticker(msg){
 bot.on("polling_error",(err)=>console.error("Polling error:",err.message))
 
 app.get("/",(req,res)=>{
-res.send("Bot is running")
-})
-
+    res.sendFile(path.join(__dirname,"../public/index.html"));
+});
 const PORT=process.env.PORT||3000
 
 setInterval(()=>{
