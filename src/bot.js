@@ -1,5 +1,6 @@
 const express=require("express")
 const app=express()
+const path = require("path");
 const TelegramBot=require("node-telegram-bot-api")
 const{getAIResponse,getStickerResponse}=require("./ai")
 const{getMemory,saveMemory,clearMemory}=require("./memory")
